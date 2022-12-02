@@ -4,6 +4,12 @@ import styles from '../../styles/Home.module.css';
 import React from 'react';
 
 export default function Home() {
+  const loginFormWithKakao = () => {
+    window.Kakao.Auth.authorize({
+      redirectUri: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI,
+    });
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -27,13 +33,17 @@ export default function Home() {
           sizes="16x16"
           href="/imgs/favicon/favicon-16x16.png"
         />
+        <script
+          defer
+          src="https://developers.kakao.com/sdk/js/kakao.js"
+        ></script>
       </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
-
+        <button onClick={loginFormWithKakao}>카카오 로그인</button>
         <p className={styles.description}>
           Get started by editing{' '}
           <code className={styles.code}>pages/index.js</code>
