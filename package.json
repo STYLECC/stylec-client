@@ -12,11 +12,8 @@
     "@types/react-cookies": "^0.1.0",
     "axios": "^1.2.1",
     "next": "13.0.5",
-<<<<<<< HEAD
     "next-cookies": "^2.0.3",
-=======
     "next-auth": "^4.18.0",
->>>>>>> 8c0fbf1 (Feat: next-auth 설치 및 카카오로그인 1차 개발 중)
     "react": "18.2.0",
     "react-cookies": "^0.1.1",
     "react-dom": "18.2.0"
