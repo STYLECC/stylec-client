@@ -1,4 +1,4 @@
-import styles from '../../styles/Home.module.css';
+import styles from 'styles/Home.module.css';
 import React, { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { setToken } from '@/plugins/TokenManager';
