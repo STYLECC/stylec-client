@@ -1,6 +1,7 @@
 import styles from '../../styles/Home.module.css';
 import React, { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { setToken } from '@/plugins/TokenManager';
 
 interface ResponseType {
   success: boolean;
@@ -34,7 +35,7 @@ export default function Kakao() {
       if (response.success) {
         // 성공하면 홈으로 리다이렉트
         if (response.data) {
-          console.log(response.data.accessToken, response.data.refreshToken);
+          setToken(response.data.accessToken, response.data.refreshToken);
         }
         router.push('/');
       } else {
