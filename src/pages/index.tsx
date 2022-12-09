@@ -1,8 +1,20 @@
 import Head from 'next/head';
 import styles from '../../styles/Home.module.css';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAuthState, setAuthState } from '@/store/authSlice';
+import { wrapper } from '@/store/store';
+import { getToken } from '@/plugins/TokenManager';
+import axios from 'axios';
+import { GetServerSideProps } from 'next';
+import { Context } from 'next-redux-wrapper';
+import { AppContext } from 'next/app';
 
 export default function Home() {
+  const { authState } = useSelector(selectAuthState);
+  console.log(authState);
+  const dispatch = useDispatch();
+
   const loginFormWithKakao = () => {
     window.Kakao.Auth.authorize({
       redirectUri: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI,
@@ -39,6 +51,16 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
+        <h1>{authState ? '로그인 성공' : '아직 로그인 안했어요'}</h1>
+        <button
+          onClick={() =>
+            authState
+              ? dispatch(setAuthState(false))
+              : dispatch(setAuthState(true))
+          }
+        >
+          {authState ? 'Logout' : 'LogIn'}
+        </button>
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
@@ -50,3 +72,37 @@ export default function Home() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps =
+  wrapper.getServerSideProps((store) => async (context: Context) => {
+    console.log('______________________indexx________________________');
+    console.log(context, 'context indexx');
+    console.log('______________________indexx________________________');
+    // const cookie = context.req ? context.req.headers.cookie : '';
+    // await store.dispatch(setAuthState(true));
+    return {
+      props: {}, // will be passed to the page component as props
+    };
+  });
+
+// export const getServerSideProps = wrapper.getServerSideProps(
+//   (store) =>
+//     async ({ params }) => {
+//       console.log(params);
+//       // we can set the initial state from here
+//       // we are setting to false but you can run your custom logic here
+//       const token = getToken('accessToken');
+//       if (token) {
+//         axios.defaults.headers.Authorization = 'Bearer ' + token;
+//       } else {
+//         axios.defaults.headers.Authorization = '';
+//       }
+//       // await store.dispatch(setAuthState(false));
+//       console.log('State on server', store.getState());
+//       return {
+//         props: {
+//           authState: true,
+//         },
+//       };
+//     },
+// );

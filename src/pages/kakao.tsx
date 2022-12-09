@@ -2,6 +2,8 @@ import styles from '../../styles/Home.module.css';
 import React, { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { setToken } from '@/plugins/TokenManager';
+import { useDispatch } from 'react-redux';
+import { setAuthState } from '@/store/authSlice';
 
 interface ResponseType {
   success: boolean;
@@ -14,6 +16,7 @@ interface ResponseType {
 
 export default function Kakao() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { code: authCode, error: kakaoServerError } = router.query;
 
   const loginHandler = useCallback(
@@ -36,11 +39,13 @@ export default function Kakao() {
         // 성공하면 홈으로 리다이렉트
         if (response.data) {
           setToken(response.data.accessToken, response.data.refreshToken);
+          dispatch(setAuthState(true));
         }
         router.push('/');
       } else {
         // 실패하면 에러 페이지로 리다이렉트
         alert('실패 ㅠㅜ');
+        dispatch(setAuthState(false));
       }
     },
     [router],

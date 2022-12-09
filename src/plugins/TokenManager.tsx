@@ -1,6 +1,10 @@
 import axios from 'axios';
 import cookie from 'react-cookies';
 
+function getToken(key: string) {
+  return cookie.load('accessToken');
+}
+
 function setToken(accessToken: string, refreshToken: string) {
   axios.defaults.headers.Authorization = 'Bearer ' + accessToken;
 
@@ -19,5 +23,5 @@ function setToken(accessToken: string, refreshToken: string) {
   });
 }
 
-export { setToken };
+export { getToken, setToken };
 // ref: https://lemontia.tistory.com/1012
