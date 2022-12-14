@@ -2,14 +2,14 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 
 function getToken(key: string) {
-  return cookie.load('accessToken');
+  return cookie.load(key);
 }
 
 function setToken(accessToken: string, refreshToken: string) {
-  axios.defaults.headers.Authorization = 'Bearer ' + accessToken;
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
 
   const expires = new Date();
-  expires.setDate(Date.now() + 1000 * 60 * 60 * 24);
+  expires.setMinutes(expires.getMinutes() + 2);
 
   cookie.save('accessToken', accessToken, {
     path: '/',

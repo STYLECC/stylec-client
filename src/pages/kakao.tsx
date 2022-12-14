@@ -1,9 +1,10 @@
 import styles from '../../styles/Home.module.css';
 import React, { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { setToken } from '@/plugins/TokenManager';
+import { setToken } from '@/plugins/tokenManager';
 import { useDispatch } from 'react-redux';
 import { setAuthState } from '@/store/authSlice';
+import { defaultValue, solbi } from '.';
 
 interface ResponseType {
   success: boolean;
@@ -39,13 +40,13 @@ export default function Kakao() {
         // 성공하면 홈으로 리다이렉트
         if (response.data) {
           setToken(response.data.accessToken, response.data.refreshToken);
-          dispatch(setAuthState(true));
+          dispatch(setAuthState({ ...solbi, isLogin: true }));
         }
         router.push('/');
       } else {
         // 실패하면 에러 페이지로 리다이렉트
         alert('실패 ㅠㅜ');
-        dispatch(setAuthState(false));
+        dispatch(setAuthState({ ...defaultValue, isLogin: false }));
       }
     },
     [router],

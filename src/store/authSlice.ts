@@ -1,13 +1,19 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { AppState } from './store';
 import { HYDRATE } from 'next-redux-wrapper';
 
 export interface AuthState {
-  authState: boolean;
+  isLogin: boolean;
+  userName: string;
+  userId: string;
+  imageUrl: string;
 }
 
 const initialState: AuthState = {
-  authState: false,
+  isLogin: false,
+  userName: '',
+  userId: '',
+  imageUrl: '',
 };
 
 export const authSlice = createSlice({
@@ -15,22 +21,15 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setAuthState(state, action) {
-      state.authState = action.payload;
+      state.isLogin = action.payload.isLogin;
+      state.userName = action.payload.userName;
+      state.userId = action.payload.userId;
+      state.imageUrl = action.payload.imageUrl;
     },
   },
-
-  // extraReducers: {
-  //   [HYDRATE]: (state: AuthState, action: PayloadAction<any>) => {
-  //     console.log('HYDRATE', action.payload);
-  //     return {
-  //       ...state,
-  //       ...action.payload.auth,
-  //     };
-  //   },
-  // },
-
   extraReducers: (builder) => {
     builder.addCase(HYDRATE, (state, action: any) => {
+      console.log('HYDRATE', state, action.payload);
       return {
         ...state,
         ...action.payload.auth,
