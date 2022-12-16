@@ -14,12 +14,14 @@ function setToken(accessToken: string, refreshToken: string) {
   cookie.save('accessToken', accessToken, {
     path: '/',
     expires,
-    // httpOnly: false, 일반적인 도메인에서만 사용 가능
+    httpOnly: false, // 일반적인 도메인에서만 사용 가능
+    secure: true,
   });
   cookie.save('refreshToken', refreshToken, {
     path: '/',
     expires,
-    // httpOnly: false,
+    httpOnly: false,
+    secure: true,
   });
 }
 

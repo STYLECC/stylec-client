@@ -4,7 +4,6 @@ import { wrapper } from '@/store/store';
 import { GetServerSidePropsContext } from 'next';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import { defaultValue, solbi } from '.';
 import aartServices from '@/plugins/service';
 
@@ -23,11 +22,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context: GetServerSidePropsContext) => {
     console.log('parrams__________before', context);
     const cookie = context.req ? context.req.cookies.accessToken : '';
-    aartServices.api.http.initConfig({
-      headers: {
-        Cookie: '',
-      },
-    });
+    aartServices.api.http.accessToken = '';
     // axios.defaults.headers.Cookie = '';
     if (context.req && cookie) {
       aartServices.api.http.accessToken = cookie;

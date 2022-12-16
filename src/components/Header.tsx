@@ -11,13 +11,7 @@ const Header = () => {
       <div className={styles.left}>
         <Link href={'/myseller'}>내 셀러 매출</Link>
         <span> | </span>
-        <span>포인트</span>
-        <span> | </span>
-        <span>스타일씨캐시</span>
-        <span> | </span>
-        <span>스타일씨마이샵</span>
-        <span> | </span>
-        <span>장바구니</span>
+        <Link href={'/posts'}>POST</Link>
       </div>
       <Link href={'/'}>
         <h2 className={styles.center}>STYLEC</h2>

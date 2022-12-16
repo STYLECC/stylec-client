@@ -1,10 +1,11 @@
-import styles from '../../styles/Home.module.css';
 import React, { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { setToken } from '@/plugins/tokenManager';
 import { useDispatch } from 'react-redux';
 import { setAuthState } from '@/store/authSlice';
-import { defaultValue, solbi } from '.';
+import { defaultValue, solbi } from '..';
+// import { wrapper } from '@/store/store';
+// import { GetServerSidePropsContext } from 'next';
 
 interface ResponseType {
   success: boolean;
@@ -15,10 +16,10 @@ interface ResponseType {
   };
 }
 
-export default function Kakao() {
+export default function Auth() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { code: authCode, error: kakaoServerError } = router.query;
+  const { auth: auth, code: authCode, error: kakaoServerError } = router.query;
 
   const loginHandler = useCallback(
     async (code: string | string[]) => {
@@ -34,7 +35,10 @@ export default function Kakao() {
             code: code,
           }),
         },
-      ).then((res) => res.json());
+      ).then((res) => {
+        console.log(res);
+        return res.json();
+      });
 
       if (response.success) {
         // 성공하면 홈으로 리다이렉트
@@ -59,11 +63,11 @@ export default function Kakao() {
       // 에러 페이지로 이동
       router.push('/');
     }
-  }, [loginHandler, authCode, kakaoServerError, router]);
+  }, [auth]);
 
   return (
-    <div className={styles.container}>
-      <main className={styles.main}>
+    <div>
+      <main>
         <h1>Welcome to STYLE C</h1>
         <h1>~로그인 중 입니다~</h1>
         <p>인가코드 : {authCode}</p>
@@ -71,3 +75,32 @@ export default function Kakao() {
     </div>
   );
 }
+
+// export const getServerSideProps = wrapper.getServerSideProps(
+//   (store) => async (context: GetServerSidePropsContext) => {
+//     console.log(
+//       '!!!!!!!!!!!!!!!!!!!cookie__________@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
+//     );
+//     console.log('parrams__________before', context.req);
+//     console.log(
+//       '!!!!!!!!!!!!!!!!!!!cookie__________@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
+//     );
+//     // const cookie = context.req ? context.req.cookies.accessToken : '';
+//     // console.log();
+//     // axios.defaults.headers.Cookie = '';
+//     // if (context.req && cookie) {
+//     //   aartServices.api.http.accessToken = cookie;
+//     //   // axios.defaults.headers.Authorization = cookie;
+//     //   await store.dispatch(setAuthState({ ...solbi, isLogin: true }));
+//     // } else {
+//     //   await store.dispatch(setAuthState({ ...defaultValue, isLogin: false }));
+//     // }
+//     // console.log('cookie__________@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+//     // console.log(cookie);
+//     // console.log('cookie__________@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+
+//     return {
+//       props: {},
+//     };
+//   },
+// );

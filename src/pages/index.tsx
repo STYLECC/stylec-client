@@ -102,13 +102,17 @@ export default function Home() {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context: GetServerSidePropsContext) => {
-    console.log('parrams__________before', context);
+    console.log('parrams__________beffdfsdfdore', context.req.headers);
+    console.log(
+      'cookie__________@!!!!fdsfsdfsdfsdfd!!!!!!!!!!!!!!!!!!!!!!!!!!',
+    );
     const cookie = context.req ? context.req.cookies.accessToken : '';
-    aartServices.api.http.initConfig({
-      headers: {
-        Cookie: '',
-      },
-    });
+    aartServices.api.http.accessToken = '';
+    // aartServices.api.http.initConfig({
+    //   headers: {
+    //     Cookie: '',
+    //   },
+    // });
     // axios.defaults.headers.Cookie = '';
     if (context.req && cookie) {
       aartServices.api.http.accessToken = cookie;
@@ -117,9 +121,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
     } else {
       await store.dispatch(setAuthState({ ...defaultValue, isLogin: false }));
     }
-    console.log('cookie__________@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-    console.log(cookie);
-    console.log('cookie__________@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    // console.log('cookie__________@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    // console.log(cookie);
+    // console.log('cookie__________@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 
     return {
       props: {},

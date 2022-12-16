@@ -3,6 +3,14 @@ import { getToken, setToken } from './tokenManager';
 
 const customAxios = axios.create();
 
+// 인스턴스가 생성 된 후 기본값 변경
+const accessToken = getToken('accessToken');
+if (accessToken) {
+  customAxios.defaults.headers.common['Authorization'] = accessToken;
+} else {
+  customAxios.defaults.headers.common['Authorization'] = '';
+}
+
 // refreshToken 관련
 let isTokenRefreshing = false;
 const refreshSubscribers: ((token: string) => void)[] = [];
@@ -14,14 +22,6 @@ const onTokenRefreshed = (accessToken: string) => {
 const addRefreshSubscriber = (callback: (token: string) => void) => {
   refreshSubscribers.push(callback);
 };
-
-// 인스턴스가 생성 된 후 기본값 변경
-const accessToken = getToken('accessToken');
-if (accessToken) {
-  customAxios.defaults.headers.common['Authorization'] = accessToken;
-} else {
-  customAxios.defaults.headers.common['Authorization'] = '';
-}
 
 // 요청 인터셉터 추가
 customAxios.interceptors.request.use(
