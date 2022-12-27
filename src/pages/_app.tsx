@@ -18,18 +18,7 @@ declare global {
 function App({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
   const persistor = persistStore(store);
-  const [queryClient] = React.useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 1 * 60 * 60 * 1000,
-            cacheTime: 5 * 60 * 60 * 1000,
-            refetchOnWindowFocus: false,
-          },
-        },
-      }),
-  );
+  const [queryClient] = React.useState(() => new QueryClient());
 
   function kakaoInit() {
     window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);

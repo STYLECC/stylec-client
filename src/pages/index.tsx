@@ -118,9 +118,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
       aartServices.api.http.accessToken = cookie;
       // axios.defaults.headers.Authorization = cookie;
       await store.dispatch(setAuthState({ ...solbi, isLogin: true }));
-    } else {
-      await store.dispatch(setAuthState({ ...defaultValue, isLogin: false }));
+      return {
+        props: {},
+      };
     }
+    await store.dispatch(setAuthState({ ...defaultValue, isLogin: false }));
     // console.log('cookie__________@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     // console.log(cookie);
     // console.log('cookie__________@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');

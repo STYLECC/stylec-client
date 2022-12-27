@@ -19,7 +19,7 @@ interface ResponseType {
 export default function Auth() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { auth: auth, code: authCode, error: kakaoServerError } = router.query;
+  const { auth, code: authCode, error: kakaoServerError } = router.query;
 
   const loginHandler = useCallback(
     async (code: string | string[]) => {
