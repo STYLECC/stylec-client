@@ -2,7 +2,7 @@ import { selectAuthState, setAuthState } from '@/store/authSlice';
 import Link from 'next/link';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import styles from '../../styles/Home.module.css';
+import styles from '../styles/Home.module.css';
 import { authLogout } from '@/plugins/auth';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
