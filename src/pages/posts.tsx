@@ -1,5 +1,5 @@
 import { dehydrate, QueryClient, useQuery } from 'react-query';
-import aartServices from '@/plugins/service';
+import aartServices from '@/services/utils/service';
 import React from 'react';
 import Header from '@/components/Header';
 
@@ -11,8 +11,7 @@ export interface Post {
 }
 
 const getBlogs = async () => {
-  const response = await aartServices.api.test.blogs();
-  return response;
+  return await aartServices.api.test.blogs();
 };
 
 export async function getStaticProps() {

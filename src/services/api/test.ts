@@ -1,9 +1,4 @@
-/**
- * API User Service
- * Deokin 2019.01.25
- * */
-
-import AxiosService from '@/services/utils/AxiosService';
+import AxiosService from '@/services/utils/axios.http';
 
 export default class APITestService extends AxiosService {
   /**
@@ -15,12 +10,12 @@ export default class APITestService extends AxiosService {
    */
   blogs() {
     return this.requestGet({
-      url: 'https://jsonplaceholder.typicode.com/posts?_page=1&_limit=10',
-      config: {
-        headers: {
-          Authorization: `Bearer ${this.accessToken}`,
-        },
+      url: 'https://jsonplaceholder.typicode.com/posts',
+      params: {
+        page: 1,
+        limit: 10,
       },
+      acToken: this.accessToken,
     });
   }
 
@@ -33,11 +28,7 @@ export default class APITestService extends AxiosService {
   user() {
     return this.requestGet({
       url: 'https://api.stylec.co.kr:4886/v1/users/naver_96260941/info',
-      config: {
-        headers: {
-          Authorization: `Bearer ${this.accessToken}`,
-        },
-      },
+      acToken: this.accessToken,
     });
   }
 }

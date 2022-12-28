@@ -1,26 +1,11 @@
 import Head from 'next/head';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAuthState, setAuthState } from '@/store/authSlice';
+import { selectAuthState } from '@/store/authSlice';
 import { selectCountState, increment } from '@/store/countSlice';
-import aartServices from '@/plugins/service';
+import aartServices from '@/services/utils/service';
 import axios from 'axios';
 import Header from '@/components/Header';
-import { wrapper } from '@/store/store';
-import { GetServerSidePropsContext } from 'next';
-
-export const solbi = {
-  userName: '소르비',
-  userId: '123456789',
-  imageUrl:
-    'https://cdn.stylec.co.kr/data/member_image/na/naver_96260941.gif?v=1670829228',
-};
-
-export const defaultValue = {
-  userName: '',
-  userId: '',
-  imageUrl: '',
-};
 
 export default function Home() {
   const userInfo = useSelector(selectAuthState);
@@ -87,48 +72,10 @@ export default function Home() {
         <button onClick={() => dispatch(increment())}>{count}</button>
         <br />
         {userInfo.isLogin && (
-          <>
-            <h1>{userInfo.isLogin ? '로그인 성공' : '아직 로그인 안했어요'}</h1>
-            <h2>{userInfo.userId}</h2>
-            <h2>{userInfo.userName}</h2>
-            <img src={userInfo.imageUrl} alt="이미지" />
-          </>
+          <h1>{userInfo.isLogin ? '로그인 성공' : '아직 로그인 안했어요'}</h1>
         )}
         <br />
       </main>
     </div>
   );
 }
-
-export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async (context: GetServerSidePropsContext) => {
-    console.log('parrams__________beffdfsdfdore', context.req.headers);
-    console.log(
-      'cookie__________@!!!!fdsfsdfsdfsdfd!!!!!!!!!!!!!!!!!!!!!!!!!!',
-    );
-    const cookie = context.req ? context.req.cookies.accessToken : '';
-    aartServices.api.http.accessToken = '';
-    // aartServices.api.http.initConfig({
-    //   headers: {
-    //     Cookie: '',
-    //   },
-    // });
-    // axios.defaults.headers.Cookie = '';
-    if (context.req && cookie) {
-      aartServices.api.http.accessToken = cookie;
-      // axios.defaults.headers.Authorization = cookie;
-      await store.dispatch(setAuthState({ ...solbi, isLogin: true }));
-      return {
-        props: {},
-      };
-    }
-    await store.dispatch(setAuthState({ ...defaultValue, isLogin: false }));
-    // console.log('cookie__________@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-    // console.log(cookie);
-    // console.log('cookie__________@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-
-    return {
-      props: {},
-    };
-  },
-);

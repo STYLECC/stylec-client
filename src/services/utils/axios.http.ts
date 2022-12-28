@@ -1,17 +1,12 @@
-import { getToken, setToken } from '@/plugins/tokenManager';
-/**
- * Axios Service
- * Deokin 2019.1.24
- * */
-
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import { getToken, setToken } from '@/plugins/token';
+import axios, { AxiosError, AxiosInstance } from 'axios';
 import {
   ParamGetType,
   ParamPostType,
   ParamPutType,
   ParamPatchType,
   ParamDeleteType,
-} from './AxiosParam.type';
+} from './axios.param.type';
 
 const acToken = getToken('accessToken');
 
@@ -27,7 +22,7 @@ const addRefreshSubscriber = (callback: (token: string) => void) => {
   refreshSubscribers.push(callback);
 };
 
-export default class AxiosService {
+export default class AxiosHttpService {
   axios: AxiosInstance;
   accessToken?: string;
 
@@ -88,84 +83,83 @@ export default class AxiosService {
     this.axios = _axos;
   }
 
-  initConfig(config: AxiosRequestConfig) {
-    const conf = config || {
-      headers: {},
-    };
-    return conf;
-  }
+  // initConfig = (config: AxiosRequestConfig) => {
+  //   const conf = config || {
+  //     headers: {},
+  //   };
+  //   return conf;
+  // };
 
-  // Catch Error (implement)
-  catchError(err: AxiosError) {
+  // Catch Error
+  catchError = (err: AxiosError) => {
     console.error(`${err?.response?.status} Error`, err?.response?.data);
     // 에러에 대한 보충 필요
     throw err;
-  }
+  };
 
-  // Request Get (implement)
-  requestGet({ url, config }: ParamGetType) {
+  // Request Get
+  requestGet = <T>({ url, params, acToken }: ParamGetType<T>) => {
     console.debug('::: Axios Request Get :::');
-    return this.axios
-      .get(url, config && this.initConfig(config))
-      .then((resp) => {
-        return resp;
-      })
-      .catch((err) => {
-        this.catchError(err);
-      });
-  }
+    return this.axios({
+      method: 'get',
+      url,
+      params,
+      headers: {
+        Authorization: acToken ? `Bearer ${acToken}` : '',
+      },
+    });
+  };
 
-  // Request Post (implement)
-  requestPost<T>({ url, body, config }: ParamPostType<T>) {
+  // Request Post
+  requestPost = <T>({ url, body, acToken }: ParamPostType<T>) => {
     console.debug('::: Axios Request Post :::');
-    return this.axios
-      .post(url, body, this.initConfig(config))
-      .then((resp) => {
-        return resp;
-      })
-      .catch((err) => {
-        this.catchError(err);
-      });
-  }
+    return this.axios({
+      method: 'post',
+      url,
+      data: body,
+      headers: {
+        Authorization: acToken ? `Bearer ${acToken}` : '',
+      },
+    });
+  };
 
-  // Request Put (implement)
-  requestPut<T>({ url, body, config }: ParamPutType<T>) {
+  // Request Put
+  requestPut = <T>({ url, body, acToken }: ParamPutType<T>) => {
     console.debug('::: Axios Request Put :::');
-    return this.axios
-      .put(url, body, this.initConfig(config))
-      .then((resp) => {
-        return resp;
-      })
-      .catch((err) => {
-        this.catchError(err);
-      });
-  }
+    return this.axios({
+      method: 'put',
+      url,
+      data: body,
+      headers: {
+        Authorization: acToken ? `Bearer ${acToken}` : '',
+      },
+    });
+  };
 
-  // Request Patch (implement)
-  requestPatch<T>({ url, body, config }: ParamPatchType<T>) {
+  // Request Patch
+  requestPatch = <T>({ url, body, acToken }: ParamPatchType<T>) => {
     console.debug('::: Axios Request Patch :::');
-    return this.axios
-      .patch(url, body, this.initConfig(config))
-      .then((resp) => {
-        return resp;
-      })
-      .catch((err) => {
-        this.catchError(err);
-      });
-  }
+    return this.axios({
+      method: 'patch',
+      url,
+      data: body,
+      headers: {
+        Authorization: acToken ? `Bearer ${acToken}` : '',
+      },
+    });
+  };
 
-  // Request Delete (implement)
-  requestDelete({ url, config }: ParamDeleteType) {
+  // Request Delete
+  requestDelete = ({ url, acToken }: ParamDeleteType) => {
     console.debug('::: Axios Request Delete :::');
-    return this.axios
-      .delete(url, this.initConfig(config))
-      .then((resp) => {
-        return resp;
-      })
-      .catch((err) => {
-        this.catchError(err);
-      });
-  }
+    return this.axios({
+      method: 'delete',
+      url,
+      headers: {
+        Authorization: acToken ? `Bearer ${acToken}` : '',
+      },
+    });
+  };
 
   // Parse Query String
   parseQuery(params: string) {

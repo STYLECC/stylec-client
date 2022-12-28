@@ -1,27 +1,28 @@
-import { AxiosRequestConfig } from 'axios';
+// import { AxiosRequestConfig } from 'axios';
 
-interface ParamGetType {
+interface ParamGetType<T> {
   url: string;
-  config?: AxiosRequestConfig;
+  params?: T;
+  acToken?: string;
 }
 interface ParamPostType<T> {
   url: string;
   body: T;
-  config: AxiosRequestConfig;
+  acToken?: string;
 }
 interface ParamPutType<T> {
   url: string;
   body: T;
-  config: AxiosRequestConfig;
+  acToken?: string;
 }
 interface ParamPatchType<T> {
   url: string;
   body: T;
-  config: AxiosRequestConfig;
+  acToken?: string;
 }
 interface ParamDeleteType {
   url: string;
-  config: AxiosRequestConfig;
+  acToken?: string;
 }
 
 export type {

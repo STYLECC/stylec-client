@@ -1,11 +1,23 @@
-import { selectAuthState } from '@/store/authSlice';
+import { selectAuthState, setAuthState } from '@/store/authSlice';
 import Link from 'next/link';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styles from '../../styles/Home.module.css';
+import { authLogout } from '@/plugins/auth';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 
 const Header = () => {
+  const dispatch = useDispatch();
   const userInfo = useSelector(selectAuthState);
+  const router = useRouter();
+
+  const logout = () => {
+    authLogout();
+    dispatch(setAuthState({ userName: null, userId: null, isLogin: false }));
+    router.push('/');
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.left}>
@@ -17,9 +29,11 @@ const Header = () => {
       <div className={styles.right}>
         {userInfo.isLogin ? (
           <>
-            <span>마이페이지</span>
+            <Link href={'/mypage'}>
+              <span>마이페이지</span>
+            </Link>
             <span> | </span>
-            <span>로그아웃</span>
+            <span onClick={logout}>로그아웃</span>
           </>
         ) : (
           <>

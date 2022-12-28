@@ -8,22 +8,31 @@ function getToken(key: string) {
 function setToken(accessToken: string, refreshToken: string) {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
 
-  const expires = new Date();
-  expires.setMinutes(expires.getMinutes() + 2);
+  const after2m = new Date();
+  after2m.setMinutes(after2m.getMinutes() + 2);
+
+  const after5m = new Date();
+  after5m.setMinutes(after5m.getMinutes() + 5);
 
   cookie.save('accessToken', accessToken, {
     path: '/',
-    expires,
-    httpOnly: false, // 일반적인 도메인에서만 사용 가능
+    expires: after2m,
+    httpOnly: false,
     secure: true,
   });
+
   cookie.save('refreshToken', refreshToken, {
     path: '/',
-    expires,
-    httpOnly: false,
+    expires: after5m,
+    httpOnly: false, // 일반적인 도메인에서만 사용 가능
     secure: true,
   });
 }
 
-export { getToken, setToken };
+function removeToken() {
+  cookie.remove('accessToken');
+  cookie.remove('refreshToken');
+}
+
+export { getToken, setToken, removeToken };
 // ref: https://lemontia.tistory.com/1012
