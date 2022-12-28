@@ -1,20 +1,44 @@
 import Head from 'next/head';
-import styles from '../../styles/Home.module.css';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAuthState } from '@/store/authSlice';
+import { selectCountState, increment } from '@/store/countSlice';
+import aartServices from '@/services/utils/service';
+import axios from 'axios';
+import Header from '@/components/Header';
 
 export default function Home() {
-  const loginFormWithKakao = () => {
-    window.Kakao.Auth.authorize({
-      redirectUri: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI,
-    });
+  const userInfo = useSelector(selectAuthState);
+  const { count } = useSelector(selectCountState);
+
+  const dispatch = useDispatch();
+
+  // api 통신 테스트
+  const getCustom = async () => {
+    const response = await aartServices.api.test.blogs();
+    console.log(response);
   };
 
-  const loginFormWithKakao2 = () => {
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
+  const getFetch = async () => {
+    const response = await fetch(
+      'https://jsonplaceholder.typicode.com/posts?_page=${1}&_limit=10',
+      {
+        method: 'GET',
+      },
+    );
+    const data = await response.json();
+    console.log(data);
+  };
+
+  const getAxios = async () => {
+    const response = await axios.get(
+      'https://jsonplaceholder.typicode.com/posts?_page=${1}&_limit=10',
+    );
+    console.log(response);
   };
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>스타일씨 [STYLE C]</title>
         <meta name="description" content="스타일씨 [STYLE C] 공식 스토어" />
@@ -38,14 +62,19 @@ export default function Home() {
         />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-        <h2>javascript 방식</h2>
-        <button onClick={loginFormWithKakao}>카카오 로그인</button>
-        <h2>rest api 방식</h2>
-        <button onClick={loginFormWithKakao2}>카카오 로그인</button>
+      <main>
+        <Header />
+        <br />
+        <button onClick={getCustom}>get 요청 보내기~~ custom</button>
+        <button onClick={getFetch}>get 요청 보내기~~ fetch</button>
+        <button onClick={getAxios}>get 요청 보내기~~ axios</button>
+        <br />
+        <button onClick={() => dispatch(increment())}>{count}</button>
+        <br />
+        {userInfo.isLogin && (
+          <h1>{userInfo.isLogin ? '로그인 성공' : '아직 로그인 안했어요'}</h1>
+        )}
+        <br />
       </main>
     </div>
   );
