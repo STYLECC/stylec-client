@@ -48,12 +48,12 @@ export default function Auth() {
   );
 
   useEffect(() => {
-    if (authCode) {
-      loginHandler(authCode);
-    } else if (kakaoServerError) {
-      // 에러 페이지로 이동
-      router.push('/');
-    }
+    // if (authCode) {
+    //   loginHandler(authCode);
+    // } else if (kakaoServerError) {
+    //   // 에러 페이지로 이동
+    //   router.push('/');
+    // }
   }, [auth]);
 
   return (
